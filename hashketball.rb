@@ -138,7 +138,7 @@ end
 
 def shoe_size(player_name)
    game_hash.each do |team, data|
-   data.each do |players, value|
+    data.each do |players, value|
       if players =="players".to_sym
         value.each do |player, detail|
           if player == player_name.to_sym
@@ -208,26 +208,119 @@ def player_stats(player_name)
   end
 end
 
-def big_shoe_rebounds
+#helper function 
+#return the player's name with biggest shoes size
+def biggest_shoe
   player_name= []
   game_hash.each do |team, data|
     data.each do |team_info, value|
       if team_info == "players".to_sym
-         obj=value.max_by {|key, value| value[:shoe]}
-         player_name<< obj.first
-        end
+        obj=value.max_by {|key, value| value[:shoe]}
+        player_name<< obj.first
+      end
     end
   end
-
+  player_name.first
+end
+  
+#helper function
+#return the most rebound 
+def most_rebound(player_name)
   game_hash.each do |team, data|
     data.each do |team_info, value|
       if team_info == "players".to_sym
         value.each do |player, detail|
-            if player == player_name[0]
+            if player == player_name
               return detail[:rebounds]
             end
           end
         end
     end
+  end
+end
+  
+def big_shoe_rebounds
+  player_with_biggest_shoe=biggest_shoe
+  most_rebound(player_with_biggest_shoe)
+end
+
+def most_points_scored(data)
+    result=[]
+    data.each do |k, v|
+      v.each do |player, detail|
+        if player ==:players
+          most_point=detail.max_by {|player_info, att| att[:point]}
+          result<<most_point.first
+        end
+      end
+    end
+    result.first.to_s
+end
+
+def winning_team(data)
+  team_scare=[]
+  game_hash.each do |k, v|
+    v.each do |p, d|
+      if p == :players
+        sum=0
+        d.each {|info, detail| sum+=detail[:points]}
+         team_scare<<sum
+      end
+    end
+  end
+  return team_scare.max
+end
+
+def winning_team(data)
+  team_score=[]
+  game_hash.each do |k, v|
+    v.each do |p, d|
+      if p == :players
+        sum=0
+        d.each {|info, detail| sum+=detail[:points]}
+        team_score<<sum
+      end
+    end
+  end
+  team_score.max
+end
+
+#helper function
+#return the player's name with the longest name
+def longest_name(data)
+  result={}
+    data.each do |k, v|
+      v.each do| p, d|
+      if p==:players
+        d.each do |i, j|
+          result[i]=i.length
+         end
+        end
+      end
+    end
+    result.max_by {|name, len| len}[0]
+  end
+
+#helper function
+#return the player's name with most steals
+def most_steals(data)
+  result={}
+    data.each do |k, v|
+      v.each do| p, d|
+      if p==:players
+        d.each do |t, s|
+         result[t]=s[:steals]
+          end
+        end
+      end
+    end 
+  result.max_by {|name, steal| steal}[0]
+end
+
+def long_name_steals_a_ton(data)
+  player_longest_name=longest_name(data)
+  player_most_steal=most_steals(data)
+  if player_longest_name == player_most_steal
+    return true
   end
 end
