@@ -258,31 +258,17 @@ def most_points_scored(data)
 end
 
 def winning_team(data)
-  team_scare=[]
+  team_score={}
   game_hash.each do |k, v|
     v.each do |p, d|
       if p == :players
         sum=0
         d.each {|info, detail| sum+=detail[:points]}
-         team_scare<<sum
+        team_score[v[:team_name]]=sum
       end
     end
   end
-  return team_scare.max
-end
-
-def winning_team(data)
-  team_score=[]
-  game_hash.each do |k, v|
-    v.each do |p, d|
-      if p == :players
-        sum=0
-        d.each {|info, detail| sum+=detail[:points]}
-        team_score<<sum
-      end
-    end
-  end
-  team_score.max
+  team_score.max_by {|team, score| score}[0]
 end
 
 #helper function
