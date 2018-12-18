@@ -299,7 +299,6 @@ end
 def long_name_steals_a_ton?
   player_longest_name=player_with_longest_name
   player_most_steal=most_steals
-  if player_longest_name.to_sym == player_most_steal
-    return true
-  end
+  return player_longest_name.to_sym == player_most_steal
+  
 end
